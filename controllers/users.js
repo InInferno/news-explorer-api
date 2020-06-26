@@ -1,7 +1,7 @@
 require('dotenv').config();
 
 const { NODE_ENV, JWT_SECRET } = process.env;
-// const bcrypt = require('bcryptjs');
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 // const NotFoundError = require('../errors/NotFoundError');
@@ -10,7 +10,8 @@ const ConflictError = require('../errors/ConflictError');
 const BadRequest = require('../errors/BadRequest');
 
 const getUser = (req, res, next) => {
-  User.findById(req.params.userId)
+  User.findById(req.user._id)
+  // .then((user) => console.log(res))
     .then((user) => res.send({ data: user }))
     .catch((err) => next(err));
 };
@@ -22,7 +23,7 @@ const createUser = (req, res, next) => {
       password: hash,
       name: req.body.name,
     }))
-    .then((user) => res.send(user.hideHash()))
+    .then((user) => res.send({ data: user.hideHash() }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new BadRequest(`Ошибка: ${err.message}`));

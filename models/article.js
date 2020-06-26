@@ -42,11 +42,16 @@ const articleSchema = new mongoose.Schema({
       message: (props) => `Введённый Вами URL-адрес: ${props.value} некорректен`,
     },
   },
+  // owner: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   requred: true,
+  //   ref: 'user',
+  //   select: false,
+  // },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     requred: true,
     ref: 'user',
-    select: false,
   },
 });
 
