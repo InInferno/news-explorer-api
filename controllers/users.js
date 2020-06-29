@@ -1,18 +1,17 @@
-require('dotenv').config();
-
 const { NODE_ENV, JWT_SECRET } = process.env;
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
-// const NotFoundError = require('../errors/NotFoundError');
+const NotFoundError = require('../errors/NotFoundError');
 const Unauthorized = require('../errors/Unauthorized');
 const ConflictError = require('../errors/ConflictError');
 const BadRequest = require('../errors/BadRequest');
+const { thereIsNoUser, emailIsAlreadyInUse } = require('../errors/errorMessages');
 
 const getUser = (req, res, next) => {
   User.findById(req.user._id)
-  // .then((user) => console.log(res))
-    .then((user) => res.send({ data: user }))
+    .orFail(() => new NotFoundError(thereIsNoUser))
+    .then((user) => res.send({ data: user}))
     .catch((err) => next(err));
 };
 
@@ -28,7 +27,7 @@ const createUser = (req, res, next) => {
       if (err.name === 'ValidationError') {
         next(new BadRequest(`Ошибка: ${err.message}`));
       } else if (err.code === 11000) {
-        next(new ConflictError(`Указанный вами email: ${req.body.email} уже используется`));
+        next(new ConflictError(emailIsAlreadyInUse));
       } else {
         next(err);
       }

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const { wrongArticleURL, wrongImageURL } = require('../errors/errorMessages');
 
 const articleSchema = new mongoose.Schema({
   keyword: {
@@ -29,7 +30,7 @@ const articleSchema = new mongoose.Schema({
       validator(articleLink) {
         return validator.isURL(articleLink, { protocol: ['http', 'https'], require_protocol: true });
       },
-      message: (props) => `Введённый Вами URL-адрес: ${props.value} некорректен`,
+      message: () => wrongArticleURL,
     },
   },
   image: {
@@ -39,20 +40,21 @@ const articleSchema = new mongoose.Schema({
       validator(imageLink) {
         return validator.isURL(imageLink, { protocol: ['http', 'https'], require_protocol: true });
       },
-      message: (props) => `Введённый Вами URL-адрес: ${props.value} некорректен`,
+      message: () => wrongImageURL,
     },
   },
-  // owner: {
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   requred: true,
-  //   ref: 'user',
-  //   select: false,
-  // },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     requred: true,
     ref: 'user',
+    select: false,
   },
 });
+
+articleSchema.methods.hideOwner = function hideOwner() {
+  const obj = this.toObject();
+  delete obj.owner;
+  return obj;
+};
 
 module.exports = mongoose.model('article', articleSchema);
