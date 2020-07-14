@@ -1,6 +1,6 @@
 # Backend NewsExploler
 
-Ссылка: [NewsExplorer Backend](https://api.newsexp.ml/ "NewsExplorer Backend")
+Ссылка: [NewsExplorer Backend](https://api.newsexp.ml/ "NewsExplorer Backend"). 
 Бэкенд проекта по поиску и хранению новостей.
 Версия: v. 0.0.1
 
