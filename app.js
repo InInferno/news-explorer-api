@@ -8,12 +8,24 @@ const rateLimit = require('express-rate-limit');
 const { errors } = require('celebrate');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const errorHandler = require('./middlewares/errorHandler');
+const cors = require('cors');
+
+
+const app = express();
+
+const corsOptions = {
+  origin: [
+      'http://localhost:8080',
+      'https://newsexp.ml',
+      'http://newsexp.ml',
+  ],
+  credentials: true,
+};
+app.use(cors(corsOptions));
 
 const {
   PORT, DATABASE_URL, DATABASE_OPTIONS, RATE_LIMIT_CONFIG,
 } = require('./config');
-
-const app = express();
 
 app.use(rateLimit(RATE_LIMIT_CONFIG));
 app.use(helmet());
