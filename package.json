@@ -45,7 +45,7 @@
     "express-winston": "^4.0.3",
     "helmet": "^3.23.2",
     "jsonwebtoken": "^9.0.0",
-    "mongoose": "^5.13.16",
+    "mongoose": "^5.13.20",
     "nodemon": "^2.0.21",
     "ratelimit": "0.0.4",
     "validator": "^13.7.0",
